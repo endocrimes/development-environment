@@ -7,11 +7,13 @@ env.user = "root"
 def install_or_update_dotfiles():
     if exists('~/.files.git'):
         run("git --work-tree=$HOME --git-dir=$HOME/.files.git pull origin master")
+        run("git --work-tree=$HOME --git-dir=$HOME/.files.git submodule update --init --recursive")
     else:
         run("apt-get install git -y &> /dev/null")
         run("git --work-tree=$HOME --git-dir=$HOME/.files.git init")
         run("git --work-tree=$HOME --git-dir=$HOME/.files.git remote add origin https://github.com/endocrimes/Dotfiles.git")
         run("git --work-tree=$HOME --git-dir=$HOME/.files.git pull origin master")
+        run("git --work-tree=$HOME --git-dir=$HOME/.files.git submodule update --init --recursive")
 
 @task
 def setup():
@@ -19,3 +21,4 @@ def setup():
     run("apt-get upgrade -y")
     install_or_update_dotfiles()
     run(".config/os/ubuntu/install.sh")
+    run("chsh -s $(which zsh)")
